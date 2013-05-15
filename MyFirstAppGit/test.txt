@@ -10,4 +10,8 @@ John test 4
 
 matt test 2
 
+<<<<<<< HEAD
 John test 5 (Rebase)
+=======
+matt test 3
+>>>>>>> branch 'master' of git@github.com:arcticmatt/MyFirstAppGit.git

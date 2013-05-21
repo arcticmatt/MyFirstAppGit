@@ -3,7 +3,8 @@
 
     <string name="app_name">MyFirstAppGit</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="thisButton">This is a button</string>
+    <string name="edit_message">Edit this message.</string>
+    <string name="button_send">Send</string>
 
 </resources>

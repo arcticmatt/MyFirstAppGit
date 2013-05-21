@@ -7,4 +7,6 @@
     <string name="edit_message">Edit this message.</string>
     <string name="button_send">Send</string>
 
+    <string name="title_activity_display_message">My Message</string>
+
 </resources>

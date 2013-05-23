@@ -20,7 +20,7 @@
         android:gravity="top"
         android:hint="@string/edit_message" />
 
-    <Button
+    <Button android:id="@+id/btnSendSMS"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"

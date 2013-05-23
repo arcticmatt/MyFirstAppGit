@@ -9,11 +9,11 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <EditText android:id="@+id/send_to"
+    <EditText android:id="@+id/txtPhoneNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/send_to" />
-    <EditText android:id="@+id/edit_message"
+    <EditText android:id="@+id/txtMessage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

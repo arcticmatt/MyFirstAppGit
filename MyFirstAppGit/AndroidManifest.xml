@@ -30,4 +30,13 @@
                 android:value="com.example.myfirstapp.MainActivity" />
     </application>
 
+    <!--
+    this will let the user know what specific access permissions are required by the
+    application, so that they can choose whether or not to install it
+    -->
+    <uses-permission android:name="android.permission.SEND_SMS">
+    </uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" >
+    </uses-permission>
+
 </manifest>

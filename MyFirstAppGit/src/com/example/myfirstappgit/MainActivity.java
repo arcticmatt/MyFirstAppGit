@@ -22,12 +22,15 @@ public class MainActivity extends Activity {
     EditText txtPhoneNo;
     EditText txtMessage;
 
+
+
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+    }
 
-        btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
+        /*btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
         txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
 
@@ -37,6 +40,7 @@ public class MainActivity extends Activity {
                 String message = txtMessage.getText().toString();
                 if (phoneNo.length()>0 && message.length()>0) {
                     sendSMS(phoneNo, message);
+                    sendMessage();
                 }
                 else
                     Toast.makeText(getBaseContext(),
@@ -44,7 +48,9 @@ public class MainActivity extends Activity {
                     Toast.LENGTH_SHORT).show();
             }
         });
+
 	}
+
 
     //sends an SMS message to another device
     private void sendSMS(String phoneNumber, String message) {
@@ -107,7 +113,18 @@ public class MainActivity extends Activity {
 
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+
+        // this is the simpler version
+
+        PendingIntent pi = PendingIntent.getActivity(this, 0,
+                new Intent(this, DisplayMessageActivity.class), 0);
+        SmsManager sms = SmsManager.getDefault();
+        //you CANNOT use an intent instead of PendingIntent (it will create an error)
+        sms.sendTextMessage(phoneNumber, null, message, pi, null);
+
+
     }
+    */
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,12 +133,20 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-    public void sendMessage (View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
+    public void sendMessage() {
+        /*Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.txtMessage);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        startActivity(intent);*/
+
+        String phoneNo = txtPhoneNo.getText().toString();
+        String messageSent = txtMessage.getText().toString();
+        PendingIntent pi = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
+        SmsManager sms = SmsManager.getDefault();
+        //you CANNOT use an intent instead of PendingIntent (it will create an error)
+        sms.sendTextMessage(phoneNo, null, messageSent, pi, null);
     }
 
 }

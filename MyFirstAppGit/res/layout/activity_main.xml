@@ -24,7 +24,6 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:text="@string/button_send"
-        android:onClick="sendMessage"/>
+        android:text="@string/button_send" />
 
 </LinearLayout>

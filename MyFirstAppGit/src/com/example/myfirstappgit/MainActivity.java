@@ -31,7 +31,22 @@ public class MainActivity extends Activity {
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
         txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
-	}
+
+        btnSendSMS.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                String phoneNo = txtPhoneNo.getText().toString();
+                String message = txtMessage.getText().toString();
+                if (phoneNo.length()>0 && message.length()>0)
+                    sendSMS(phoneNo, message);
+                else
+                    Toast.makeText(getBaseContext(),
+                            "Please enter both phone number and message.",
+                            Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     //sends an SMS message to another device
@@ -115,21 +130,12 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-    public void sendMessage(View view) {
-        /*Intent intent = new Intent(this, DisplayMessageActivity.class);
+    public void sendMessage() {
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.txtMessage);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);*/
-
-        String phoneNo = txtPhoneNo.getText().toString();
-        String messageSent = txtMessage.getText().toString();
-        if (phoneNo.length()>0 && messageSent.length()>0)
-            sendSMS(phoneNo, messageSent);
-        else
-            Toast.makeText(this,
-                    "Please enter both phone number and message.",
-                    Toast.LENGTH_SHORT).show();
+        startActivity(intent);
     }
 
 }

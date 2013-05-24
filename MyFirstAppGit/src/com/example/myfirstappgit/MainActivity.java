@@ -124,7 +124,12 @@ public class MainActivity extends Activity {
 
         String phoneNo = txtPhoneNo.getText().toString();
         String messageSent = txtMessage.getText().toString();
-        sendSMS(phoneNo, messageSent);
+        if (phoneNo.length()>0 && messageSent.length()>0)
+            sendSMS(phoneNo, messageSent);
+        else
+            Toast.makeText(this,
+                    "Please enter both phone number and message.",
+                    Toast.LENGTH_SHORT).show();
     }
 
 }

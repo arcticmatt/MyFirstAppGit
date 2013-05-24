@@ -33,6 +33,8 @@ public class MainActivity extends Activity {
         txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
 
+
+
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -43,7 +45,7 @@ public class MainActivity extends Activity {
                 String[] messageArray = listToArray(storedMessages);
                 if (phoneNo.length()>0 && message.length()>0)
                 {
-                    //sendSMS(phoneNo, message);
+                    sendSMS(phoneNo, message);
                     showOwnMessage(messageArray);
 
                 }
@@ -161,10 +163,58 @@ public class MainActivity extends Activity {
         return arrayStoredMessages;
 
     }
+    @Override
 
-    public ArrayList<String> returnStoredMessages()
+    protected void onResume()
     {
-        return storedMessages;
+        super.onResume();
+        Intent intent = getIntent();
+        if (intent != null)
+        {
+            String message = intent.getStringExtra(SmsReceiver.EXTRA_MESSAGE);
+            storedMessages.add(message);
+            String[] messageArray = listToArray(storedMessages);
+            showOwnMessage(messageArray);
+        }
     }
+
+
+
+    /*
+    public class ReceiveMessages extends Activity
+    {
+        ReceiveMessages myReceiver = null;
+        Boolean myReceiverIsRegistered = false;
+        protected void onCreate(Bundle savedInstanceState)
+        {
+            myReceiver = new ReceiveMessages();
+
+        }
+        protected void onResume()
+        {
+            if (!myReceiverIsRegistered)
+            {
+                registerReceiver(myReceiver, new IntentFilter("com.mycompany.myapp.SOME_MESSAGE"));
+                myReceiverIsRegistered = true;
+            }
+        }
+        protected void onPause()
+        {
+            if (myReceiverIsRegistered)
+            {
+                unregisterReceiver(myReceiver);
+                myReceiverIsRegistered = false;
+            }
+        }
+
+
+
+
+    }
+    */
+
+
+
+
 
 }

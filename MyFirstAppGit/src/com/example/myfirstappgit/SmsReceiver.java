@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * Created by arcticmatt on 5/23/13.
  */
 public class SmsReceiver extends BroadcastReceiver {
+    public final static String EXTRA_MESSAGE = "com.example.myfirstappgit.MESSAGE";
+    private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -40,18 +42,15 @@ public class SmsReceiver extends BroadcastReceiver {
             //---display the new SMS message---
             //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
 
-            ArrayList<String> storedMessages = returnStoredMessages();
-            storedMessages.add(str);
-            String[] messageArray = listToArray(storedMessages);
-            showReceivedMessage(messageArray);
+            //---display the new SMS message---
+            //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(context, MainActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra(EXTRA_MESSAGE, str);
+            context.startActivity(i);
+
 
         }
-    }
-    public void showReceivedMessage(String[] ownMessageArray)
-    {
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, ownMessageArray);
-        ListView listView = (ListView) findViewById(R.id.listConvo);
-        listView.setAdapter(adapter);
     }
 }

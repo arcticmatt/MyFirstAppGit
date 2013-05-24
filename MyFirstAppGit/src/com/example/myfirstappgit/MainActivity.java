@@ -231,8 +231,8 @@ public class MainActivity extends Activity {
         {
             //---get the SMS message passed in---
             Bundle bundle = intent.getExtras();
-            SmsMessage[] msgs = null;
-            String str = "";
+            SmsMessage[] msgs;
+            String str = "test";
             if (bundle != null)
             {
                 //---retrieve the SMS message received---
@@ -251,7 +251,7 @@ public class MainActivity extends Activity {
                 //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
 
                 //---display the new SMS message---
-                //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
 
 
                 storedMessages.add(str);

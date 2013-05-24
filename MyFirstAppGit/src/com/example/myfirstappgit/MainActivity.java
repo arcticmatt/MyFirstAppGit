@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.Activity;
 import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
@@ -41,10 +42,11 @@ public class MainActivity extends Activity {
             {
                 String phoneNo = txtPhoneNo.getText().toString();
                 String message = txtMessage.getText().toString();
-                storedMessages.add(message);
-                String[] messageArray = listToArray(storedMessages);
+
                 if (phoneNo.length()>0 && message.length()>0)
                 {
+                    storedMessages.add(message);
+                    String[] messageArray = listToArray(storedMessages);
                     sendSMS(phoneNo, message);
                     showOwnMessage(messageArray);
 
@@ -163,8 +165,9 @@ public class MainActivity extends Activity {
         return arrayStoredMessages;
 
     }
-    @Override
 
+    /*
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -172,11 +175,16 @@ public class MainActivity extends Activity {
         if (intent != null)
         {
             String message = intent.getStringExtra(SmsReceiver.EXTRA_MESSAGE);
+
+            Toast.makeText(getBaseContext(), message,
+                    Toast.LENGTH_LONG).show();
+
             storedMessages.add(message);
             String[] messageArray = listToArray(storedMessages);
             showOwnMessage(messageArray);
         }
     }
+    */
 
 
 
@@ -212,6 +220,57 @@ public class MainActivity extends Activity {
 
     }
     */
+
+    public class SmsReceiver extends BroadcastReceiver
+    {
+        public final static String EXTRA_MESSAGE = "com.example.myfirstappgit.MESSAGE";
+        private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            //---get the SMS message passed in---
+            Bundle bundle = intent.getExtras();
+            SmsMessage[] msgs = null;
+            String str = "";
+            if (bundle != null)
+            {
+                //---retrieve the SMS message received---
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                msgs = new SmsMessage[pdus.length];
+                for (int i=0; i<msgs.length; i++)
+                {
+                    msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
+                    str += "SMS from " + msgs[i].getOriginatingAddress();
+                    str += " :";
+                    str += msgs[i].getMessageBody().toString();
+                    str += "\n";
+                }
+
+                //---display the new SMS message---
+                //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+
+                //---display the new SMS message---
+                //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+
+
+                storedMessages.add(str);
+                String[] messageArray = listToArray(storedMessages);
+                showOwnMessage(messageArray);
+
+            }
+        }
+
+        /*
+        public void showReceivedMessage(String[] ownMessageArray)
+        {
+            ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, ownMessageArray);
+            ListView listView = (ListView) findViewById(R.id.listConvo);
+            listView.setAdapter(adapter);
+        }
+        */
+    }
 
 
 

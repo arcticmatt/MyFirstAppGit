@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by arcticmatt on 5/23/13.
@@ -34,7 +38,20 @@ public class SmsReceiver extends BroadcastReceiver {
             }
 
             //---display the new SMS message---
-            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+
+            ArrayList<String> storedMessages = returnStoredMessages();
+            storedMessages.add(str);
+            String[] messageArray = listToArray(storedMessages);
+            showReceivedMessage(messageArray);
+
         }
+    }
+    public void showReceivedMessage(String[] ownMessageArray)
+    {
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, ownMessageArray);
+        ListView listView = (ListView) findViewById(R.id.listConvo);
+        listView.setAdapter(adapter);
     }
 }

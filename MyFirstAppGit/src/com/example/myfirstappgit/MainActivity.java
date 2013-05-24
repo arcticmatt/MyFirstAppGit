@@ -10,9 +10,9 @@ import android.app.Activity;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity {
@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
     Button btnSendSMS;
     EditText txtPhoneNo;
     EditText txtMessage;
+    protected ArrayList <String> storedMessages = new ArrayList<String>();
 
 
     @Override
@@ -38,12 +39,20 @@ public class MainActivity extends Activity {
             {
                 String phoneNo = txtPhoneNo.getText().toString();
                 String message = txtMessage.getText().toString();
+                storedMessages.add(message);
+                String[] messageArray = listToArray(storedMessages);
                 if (phoneNo.length()>0 && message.length()>0)
-                    sendSMS(phoneNo, message);
+                {
+                    //sendSMS(phoneNo, message);
+                    showOwnMessage(messageArray);
+
+                }
                 else
+                {
                     Toast.makeText(getBaseContext(),
                             "Please enter both phone number and message.",
                             Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -111,6 +120,8 @@ public class MainActivity extends Activity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
+
+
         // this is the simpler version
         /*
         PendingIntent pi = PendingIntent.getActivity(this, 0,
@@ -130,12 +141,30 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-    public void sendMessage() {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.txtMessage);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+    public void showOwnMessage(String[] ownMessageArray)
+    {
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, ownMessageArray);
+        ListView listView = (ListView) findViewById(R.id.listConvo);
+        listView.setAdapter(adapter);
+
+    }
+
+    public String[] listToArray(ArrayList<String> storageArrayList)
+    {
+
+        String[] arrayStoredMessages = new String[storageArrayList.size()];
+        for (int i=0; i<storageArrayList.size(); i++)
+        {
+            arrayStoredMessages[i] = storageArrayList.get(i);
+        }
+        return arrayStoredMessages;
+
+    }
+
+    public ArrayList<String> returnStoredMessages()
+    {
+        return storedMessages;
     }
 
 }

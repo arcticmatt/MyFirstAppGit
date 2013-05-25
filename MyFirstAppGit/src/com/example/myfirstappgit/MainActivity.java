@@ -143,6 +143,25 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Intent i = getIntent();
+        if (i != null)
+        {
+            String message = i.getStringExtra("message2");
+            if (message != null)
+            {
+                storedMessages.add(message);
+                String[] messageArray = listToArray(storedMessages);
+                showOwnMessage(messageArray);
+            }
+        }
+    }
+
     public void showOwnMessage(String[] ownMessageArray)
     {
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
@@ -162,23 +181,6 @@ public class MainActivity extends Activity {
         }
         return arrayStoredMessages;
 
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        Intent i = getIntent();
-        if (i != null)
-        {
-            String message = i.getStringExtra("message2");
-            if (message != null)
-            {
-                storedMessages.add(message);
-                String[] messageArray = listToArray(storedMessages);
-                showOwnMessage(messageArray);
-            }
-        }
     }
 
 

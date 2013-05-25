@@ -163,58 +163,30 @@ public class MainActivity extends Activity {
         return arrayStoredMessages;
 
     }
-    @Override
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
     protected void onResume()
     {
         super.onResume();
+
         Intent intent = getIntent();
         if (intent != null)
         {
-            String message = intent.getStringExtra(SmsReceiver.EXTRA_MESSAGE);
-            storedMessages.add(message);
-            String[] messageArray = listToArray(storedMessages);
-            showOwnMessage(messageArray);
-        }
-    }
-
-
-
-    /*
-    public class ReceiveMessages extends Activity
-    {
-        ReceiveMessages myReceiver = null;
-        Boolean myReceiverIsRegistered = false;
-        protected void onCreate(Bundle savedInstanceState)
-        {
-            myReceiver = new ReceiveMessages();
-
-        }
-        protected void onResume()
-        {
-            if (!myReceiverIsRegistered)
+            String message = intent.getStringExtra("message2");
+            if (message != null)
             {
-                registerReceiver(myReceiver, new IntentFilter("com.mycompany.myapp.SOME_MESSAGE"));
-                myReceiverIsRegistered = true;
+                storedMessages.add(message);
+                String[] messageArray = listToArray(storedMessages);
+                showOwnMessage(messageArray);
             }
         }
-        protected void onPause()
-        {
-            if (myReceiverIsRegistered)
-            {
-                unregisterReceiver(myReceiver);
-                myReceiverIsRegistered = false;
-            }
-        }
-
-
-
-
     }
-    */
-
-
-
 
 
 }

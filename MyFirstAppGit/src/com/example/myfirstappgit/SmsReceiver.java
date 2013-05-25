@@ -45,9 +45,10 @@ public class SmsReceiver extends BroadcastReceiver {
             //---display the new SMS message---
             //Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
 
+
             Intent i = new Intent(context, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra(EXTRA_MESSAGE, str);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("message2", str);
             context.startActivity(i);
 
 

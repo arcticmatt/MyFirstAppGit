@@ -25,7 +25,6 @@ public class SmsReceiver extends BroadcastReceiver {
         //---get the SMS message passed in---
         Bundle bundle = intent.getExtras();
 
-
         if (bundle != null)
         {
             String receivedMessage = convertPDUToString(bundle);

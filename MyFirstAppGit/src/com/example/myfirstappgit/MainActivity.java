@@ -250,7 +250,7 @@ public class MainActivity extends Activity {
         Intent i = getIntent();
         if (i != null)
         {
-            String message = i.getStringExtra("message2");
+            String message = i.getStringExtra("message");
             if (message != null)
             {
                 storedMessages.add(message);

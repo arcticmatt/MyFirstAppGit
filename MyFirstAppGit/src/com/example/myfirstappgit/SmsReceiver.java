@@ -15,8 +15,6 @@ import java.util.ArrayList;
  * Created by arcticmatt on 5/23/13.
  */
 public class SmsReceiver extends BroadcastReceiver {
-    public final static String EXTRA_MESSAGE = "com.example.myfirstappgit.MESSAGE";
-    private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
 
     @Override
@@ -34,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
             Intent i = new Intent(context, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("message2", receivedMessage);
+            i.putExtra("message", receivedMessage);
             context.startActivity(i);
         }
     }

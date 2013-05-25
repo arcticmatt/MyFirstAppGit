@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class SmsReceiver extends BroadcastReceiver {
     public final static String EXTRA_MESSAGE = "com.example.myfirstappgit.MESSAGE";
     private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    String str = "";
+
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -30,15 +30,16 @@ public class SmsReceiver extends BroadcastReceiver {
             String receivedMessage = convertPDUToString(bundle);
 
             //---display the new SMS message---
-            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, receivedMessage, Toast.LENGTH_SHORT).show();
 
             Intent i = new Intent(context, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("message2", str);
+            i.putExtra("message2", receivedMessage);
             context.startActivity(i);
         }
     }
     protected String convertPDUToString (Bundle fromIntent) {
+        String str = "";
         Object[] pdus = (Object[]) fromIntent.get("pdus");
         SmsMessage[] msgs = new SmsMessage[pdus.length];
 

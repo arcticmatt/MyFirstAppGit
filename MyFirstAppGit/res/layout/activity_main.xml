@@ -14,7 +14,7 @@
     <ListView android:id="@+id/listConvo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7">
+        android:layout_weight="7" />
         <!-- <TextView
                 android:id="@+id/conversationText"
                 android:layout_width="match_parent"
@@ -22,13 +22,28 @@
                 android:padding="4dip"
                 android:typeface="monospace"
                 /> -->
-    </ListView>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  tools:context=".MainActivity"
+                  android:orientation="horizontal">
 
     <EditText android:id="@+id/txtPhoneNo"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:hint="@string/send_to"
-        android:clickable="false"/>
+        android:clickable="false" />
+
+    <Button android:id="@+id/btnSendSMS"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:text="@string/button_send"
+        />
+
+    </LinearLayout>
 
     <EditText android:id="@+id/txtMessage"
         android:layout_width="match_parent"
@@ -36,12 +51,8 @@
         android:layout_weight="2"
         android:gravity="top"
         android:hint="@string/edit_message"
-        android:textSize="15dp"/>
+        android:textSize="15dp" />
 
-    <Button android:id="@+id/btnSendSMS"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:text="@string/button_send" />
+
 
 </LinearLayout>

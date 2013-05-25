@@ -39,6 +39,15 @@ public class MainActivity extends Activity {
         txtMessage = (EditText) findViewById(R.id.txtMessage);
         textCount = (TextView) findViewById(R.id.charCounter);
 
+        /*
+        TextWatcher is an interface. The new TextWatcher, therefore,
+        is not an object - it is an anonymous class, which must
+        implement the three methods of the interface.
+
+        When an object of this type is attached to an Editable
+        (in this case, the txtMessage TextView), its methods
+        will be called when the text is changed.
+        */
         final TextWatcher mTextEditorWatcher = new TextWatcher(){
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
@@ -55,9 +64,12 @@ public class MainActivity extends Activity {
 
 
         };
+
+        //---adds a TextWatcher to the list of those whose methods are called
+        //---whenever this TextView's text changes
         txtMessage.addTextChangedListener(mTextEditorWatcher);
 
-        //used instead of android:onclick, in order to support more APIs
+        //---used instead of android:onclick, in order to support more APIs
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -80,6 +92,7 @@ public class MainActivity extends Activity {
                 {
                     sendSMS(phoneNo, message);
                     showMessage(messageArray);
+                    txtMessage.setText(R.string.blank_string);
 
                 }
 

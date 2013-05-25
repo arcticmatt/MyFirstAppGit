@@ -174,7 +174,7 @@ public class MainActivity extends Activity {
     public void showMessage(String[] ownMessageArray)
     {
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, ownMessageArray);
+                R.layout.mylist, ownMessageArray);
         ListView listView = (ListView) findViewById(R.id.listConvo);
         listView.setAdapter(adapter);
 

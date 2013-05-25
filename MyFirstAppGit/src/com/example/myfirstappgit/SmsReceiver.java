@@ -109,7 +109,6 @@ public class SmsReceiver extends BroadcastReceiver {
             str += "SMS from " + msgs[i].getOriginatingAddress();
             str += ": ";
             str += msgs[i].getMessageBody().toString();
-            str += "\n";
         }
         return str;
     }

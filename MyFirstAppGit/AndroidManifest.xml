@@ -16,7 +16,7 @@
         <activity
             android:name="com.example.myfirstappgit.MainActivity"
             android:label="@string/app_name" >
-            <intent-filter android:priority="2147483647">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,8 +29,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.myfirstappgit.MainActivity" />
 
-        <receiver android:name="com.example.myfirstappgit.MainActivity$SmsReceiver">
-            <intent-filter>
+        <receiver android:name="com.example.myfirstappgit.SmsReceiver">
+            <intent-filter android:priority="2147483647">
                 <action android:name=
                     "android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>

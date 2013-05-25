@@ -168,17 +168,10 @@ public class MainActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        Intent intent = getIntent();
-        if (intent != null)
+        Intent i = getIntent();
+        if (i != null)
         {
-            String message = intent.getStringExtra("message2");
+            String message = i.getStringExtra("message2");
             if (message != null)
             {
                 storedMessages.add(message);
@@ -187,6 +180,8 @@ public class MainActivity extends Activity {
             }
         }
     }
+
+
 
 
 }

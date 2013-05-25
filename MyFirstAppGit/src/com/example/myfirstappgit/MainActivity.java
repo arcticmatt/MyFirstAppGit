@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         txtMessage = (EditText) findViewById(R.id.txtMessage);
 
 
-
+        //used instead of android:onclick, in order to support more APIs
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -42,22 +42,33 @@ public class MainActivity extends Activity {
                 String phoneNo = txtPhoneNo.getText().toString();
                 String message = txtMessage.getText().toString();
 
+                //---ensures that only messages that meet the char limit
+                //---are added to the storage ArrayList
                 if (message.length() <=160) {
                     storedMessages.add(message);
                 }
+
+                //---creates an Array from the storage ArrayList
                 String[] messageArray = listToArray(storedMessages);
 
+                //---ensures that only messages that meet the char limit
+                //---are sent and shown
                 if (phoneNo.length() > 0 && message.length() > 0 && message.length() <= 160)
                 {
                     sendSMS(phoneNo, message);
                     showMessage(messageArray);
 
                 }
+
+                //---makes and shows toast that tells user to reduce character limit
                 else if (message.length() > 160) {
                     Toast.makeText(getBaseContext(),
                             "Please reduce the number of characters to 160 or below",
                             Toast.LENGTH_SHORT).show();
                 }
+
+                //---makes and shows toast that tells user to enter aa recipient
+                //---and a message
                 else
                 {
                     Toast.makeText(getBaseContext(),
@@ -74,13 +85,40 @@ public class MainActivity extends Activity {
         String SENT = "SMS_SENT";
         String DELIVERED = "SMS_DELIVERED";
 
+        /*
+        Makes the PendingIntent to set off the first onReceive method.
+        The intent carries the String SENT, as seen above.
+        getBroadcast is used in place of a constructor,
+        and retrieves a PI that will perform a broadcast,
+        like calling Context.sendBroadcast.
+        */
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
                 new Intent(SENT), 0);
 
+        //---makes the PendingIntent to set off the second onReceive method.
+        //---The intent caries the String DELIVERED, as seen above
         PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
                 new Intent(DELIVERED), 0);
 
         //when the SMS has been sent
+
+        /*
+        registerReceiver is run with an instance of BroadcastReceiver
+        (which receives intents, usually sent by sendBroadcast).
+        This registerReceiver method does not check the result yet,
+        it just registers the BroadcastReceiver to be run in the main activity,
+        i.e. it does not check any intents with the intent filter.
+
+        BroadcastReceiver is an abstract class; the parameter seen below
+        creates an anonymous CLASS, which must implement the onReceive method.
+
+        A switch-case is used in order to determine which toast to show.
+
+        When the PendingIntent is broadcast when the message is
+        successfully sent/failed by the sendTextMessage method, as
+        seen below. The result code from that broadcast is one of the five
+        capped words below
+         */
         registerReceiver(new BroadcastReceiver() {
             @Override
         public void onReceive(Context arg0, Intent arg1) {
@@ -127,7 +165,18 @@ public class MainActivity extends Activity {
             }
         }, new IntentFilter(DELIVERED));
 
+        /*
+        sentPI is broadcasted when the message is sucessfully sent/failed.
+        B/c the BroadcastReceiver was registered above, and b/c the broadcasted
+        Intent in sentPI matches the filter (SENT), the BroadcastReceiver receives
+        the broadcasted intent from sentPI, and thus its onReceive method is called.
 
+        deliveredPi is is broadcast when the message is delivered to the recipient.
+        The raw pdu of the status report is in the extended data ("pdu"). - taken
+        from the android developers website
+
+        for the SmsManager, getDefault() is used instead of a constructor
+         */
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
@@ -153,7 +202,24 @@ public class MainActivity extends Activity {
 	}
 
 
+    /*
+    This method is called when the FLAG_ACTIVITY_SINGLE_TOP is added
+    to the intent in startActivity(Intent). This means that when the
+    activity is re-launched while at the top of the activity stack
+    instead of a new instance of the activity being started,
+    onNewIntent() will be called on the existing instance with the
+    Intent that was used to re-launch it.
 
+    An activity will always be paused before receiving a new intent,
+    so you can COUNT ON ONRESUME() BEING CALLED after this method.
+
+    The setIntent(Intent) makes it so that getIntent() returns this
+    new intent instead of the original one, the new intent being in
+    the parameter.
+
+    The rest of the overriden method simply extracts the String,
+    puts it in the storage ArrayList, then shows it.
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -171,6 +237,14 @@ public class MainActivity extends Activity {
         }
     }
 
+    /*
+    I copied this from the website's Layout page. The ArrayAdapter fills
+    the ListView with TextViews (this can be changed by overriding
+    getView(int, View, ViewGroup)) to return the type of view you want.
+    This ArrayAdapter is composed of a context, a layout (here the layout
+    is not a default one, I made it in order to be able to change the
+    text size) and an Array filled with messages.
+     */
     public void showMessage(String[] ownMessageArray)
     {
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
@@ -180,6 +254,8 @@ public class MainActivity extends Activity {
 
     }
 
+    //---This is a simple method I composed that turns ArrayLists
+    //---into Arrays. The Array is to be used for ListView.
     public String[] listToArray(ArrayList<String> storageArrayList)
     {
 

@@ -12,7 +12,6 @@
         android:background="@color/black"
         android:clickable="true">
 
-
     <ListView
             android:id="@+id/listConvo"
             android:layout_width="match_parent"
@@ -25,12 +24,15 @@
             android:background="@color/black"
             android:divider="@color/dark_yellow"
             android:dividerHeight="@dimen/list_view_divider_height"/>
+
+    <!-- divider -->
     <View
             android:layout_width="fill_parent"
             android:layout_height="0.2dp"
             android:id="@+id/separator"
             android:visibility="visible"
             android:background="@android:color/darker_gray"/>
+
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -64,6 +66,7 @@
 
     </LinearLayout>
 
+    <!-- divider -->
     <View
             android:layout_width="fill_parent"
             android:layout_height="0.2dp"
@@ -86,6 +89,7 @@
             android:textSize="15dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white" android:background="@color/black"/>
+    <!-- divider -->
     <View
             android:layout_width="fill_parent"
             android:layout_height="0.2dp"

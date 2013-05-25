@@ -5,9 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
@@ -22,6 +25,8 @@ public class MainActivity extends Activity {
     EditText txtPhoneNo;
     EditText txtMessage;
     protected ArrayList <String> storedMessages = new ArrayList<String>();
+    private TextView textCount;
+
 
 
     @Override
@@ -32,7 +37,25 @@ public class MainActivity extends Activity {
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
         txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
+        textCount = (TextView) findViewById(R.id.charCounter);
 
+        final TextWatcher mTextEditorWatcher = new TextWatcher(){
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+
+                textCount.setText(String.valueOf(s.length()));
+                if(s.length() == 160){
+
+                    textCount.setTextColor(Color.RED);
+                } else textCount.setTextColor(Color.BLACK);
+            }
+
+            public void afterTextChanged(Editable s){}
+
+
+        };
+        txtMessage.addTextChangedListener(mTextEditorWatcher);
 
 
         btnSendSMS.setOnClickListener(new View.OnClickListener()
@@ -177,6 +200,7 @@ public class MainActivity extends Activity {
                 android.R.layout.simple_list_item_1, ownMessageArray);
         ListView listView = (ListView) findViewById(R.id.listConvo);
         listView.setAdapter(adapter);
+
 
     }
 

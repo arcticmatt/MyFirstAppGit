@@ -43,11 +43,16 @@ public class MainActivity extends Activity {
                 String message = txtMessage.getText().toString();
                 storedMessages.add(message);
                 String[] messageArray = listToArray(storedMessages);
-                if (phoneNo.length()>0 && message.length()>0)
+                if (phoneNo.length() > 0 && message.length() > 0 && message.length() <= 160)
                 {
                     sendSMS(phoneNo, message);
-                    showOwnMessage(messageArray);
+                    showMessage(messageArray);
 
+                }
+                else if (message.length() > 160) {
+                    Toast.makeText(getBaseContext(),
+                            "Please reduce the number of characters to 160 or below",
+                            Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -157,12 +162,12 @@ public class MainActivity extends Activity {
             {
                 storedMessages.add(message);
                 String[] messageArray = listToArray(storedMessages);
-                showOwnMessage(messageArray);
+                showMessage(messageArray);
             }
         }
     }
 
-    public void showOwnMessage(String[] ownMessageArray)
+    public void showMessage(String[] ownMessageArray)
     {
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, ownMessageArray);

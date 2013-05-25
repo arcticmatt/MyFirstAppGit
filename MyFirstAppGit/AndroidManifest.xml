@@ -29,7 +29,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.myfirstappgit.MainActivity" />
 
-        <receiver android:name="com.example.myfirstappgit.SmsReceiver">
+        <receiver android:name="com.example.myfirstappgit.MainActivity$SmsReceiver">
             <intent-filter>
                 <action android:name=
                     "android.provider.Telephony.SMS_RECEIVED" />

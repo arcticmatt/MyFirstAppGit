@@ -41,8 +41,12 @@ public class MainActivity extends Activity {
             {
                 String phoneNo = txtPhoneNo.getText().toString();
                 String message = txtMessage.getText().toString();
-                storedMessages.add(message);
+
+                if (message.length() <=160) {
+                    storedMessages.add(message);
+                }
                 String[] messageArray = listToArray(storedMessages);
+
                 if (phoneNo.length() > 0 && message.length() > 0 && message.length() <= 160)
                 {
                     sendSMS(phoneNo, message);

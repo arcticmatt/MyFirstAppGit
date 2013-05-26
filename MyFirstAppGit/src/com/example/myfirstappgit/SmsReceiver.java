@@ -1,9 +1,14 @@
 package com.example.myfirstappgit;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -28,6 +33,8 @@ when there is an Incoming SMS. Permission must be granted to receive SMSs,
 which was done in the manifest file.
  */
 public class SmsReceiver extends BroadcastReceiver {
+    protected Object[] pdus;
+    public SmsMessage[] msgs;
     /*
     This is the method that is called when the SMS Receiver is
     "invoked" by the System. This happens because we exposed this class
@@ -59,6 +66,13 @@ public class SmsReceiver extends BroadcastReceiver {
             String receivedMessage = convertBundleToString(bundle);
             //---display the new SMS message---
             Toast.makeText(context, receivedMessage, Toast.LENGTH_SHORT).show();
+
+            //if (msgs.length == 1)
+            //{
+            //    oneMessageNotification(receivedMessage);
+            //}
+
+
             Intent i = new Intent(context, MainActivity.class);
             /*
             FLAG_ACTIVITY_SINGLE_TOP - If set, the activity will not be
@@ -72,13 +86,15 @@ public class SmsReceiver extends BroadcastReceiver {
              */
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             i.putExtra("message", receivedMessage);
+            i.putExtra("sender", msgs[0].getOriginatingAddress());
             context.startActivity(i);
         }
     }
 
 
     //---This method takes in a Bundle and converts it to a String
-    protected String convertBundleToString (Bundle bundleFromIntent) {
+    protected String convertBundleToString (Bundle bundleFromIntent)
+    {
         String str = "";
         /*
         The get(String key) method of Bundle class returns the entry
@@ -89,10 +105,10 @@ public class SmsReceiver extends BroadcastReceiver {
         there might be multiple PDU objects, which is why an Object
         Array is made.
          */
-        Object[] pdus = (Object[]) bundleFromIntent.get("pdus");
+        pdus = (Object[]) bundleFromIntent.get("pdus");
         //---Makes a new Array that holds as many SmsMessage objects
         //---as there are PDUs in the Bundle.
-        SmsMessage[] msgs = new SmsMessage[pdus.length];
+        msgs = new SmsMessage[pdus.length];
         for (int i=0; i<msgs.length; i++)
         {
             /*
@@ -112,4 +128,5 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         return str;
     }
+
 }

@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
 
                 //---ensures that only messages that meet the char limit
                 //---are added to the storage ArrayList
-                if (message.length() <=160) {
+                if (message.length() <= 160 && message.length() > 0) {
                     storedMessages.add(message);
                 }
 

@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
                 if (message.length() <=160) {
                     storedMessages.add(message);
                 }
-                String[] messageArray = listToArray(storedMessages);
+                String[] messageArray = storedMessages.toArray(new String[storedMessages.size()]);
 
                 if (phoneNo.length() > 0 && message.length() > 0 && message.length() <= 160)
                 {
@@ -153,7 +154,7 @@ public class MainActivity extends Activity {
 
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
-
+        Log.d("MainActivity", "Succesfully Sent");
 
 
         // this is the simpler version
@@ -188,7 +189,7 @@ public class MainActivity extends Activity {
             if (message != null)
             {
                 storedMessages.add(message);
-                String[] messageArray = listToArray(storedMessages);
+                String[] messageArray = storedMessages.toArray(new String[storedMessages.size()]);
                 showMessage(messageArray);
             }
         }
@@ -204,17 +205,6 @@ public class MainActivity extends Activity {
 
     }
 
-    public String[] listToArray(ArrayList<String> storageArrayList)
-    {
-
-        String[] arrayStoredMessages = new String[storageArrayList.size()];
-        for (int i=0; i<storageArrayList.size(); i++)
-        {
-            arrayStoredMessages[i] = storageArrayList.get(i);
-        }
-        return arrayStoredMessages;
-
-    }
 
 
 

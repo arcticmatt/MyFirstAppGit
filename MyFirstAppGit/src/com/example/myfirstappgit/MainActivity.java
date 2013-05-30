@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
                 textCount.setText(String.valueOf(s.length()));
                 if(s.length() == 160){
 
-                    textCount.setTextColor(Color.RED);
+                    textCount.setTextColor(Color.WHITE);
                 } else textCount.setTextColor(Color.BLACK);
             }
 

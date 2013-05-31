@@ -281,6 +281,8 @@ public class MainActivity extends Activity {
     is not a default one, I made it in order to be able to change the
     text size) and an Array filled with messages.
      */
+
+
     public void showMessage(String[] ownMessageArray)
     {
         ArrayAdapter adapter = new ArrayAdapter<String>(this,

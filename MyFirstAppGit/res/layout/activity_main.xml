@@ -12,6 +12,7 @@
         android:background="@color/black"
         android:clickable="true">
 
+    <!--
     <ListView
             android:id="@+id/listConvo"
             android:layout_width="match_parent"
@@ -24,6 +25,14 @@
             android:background="@color/black"
             android:divider="@color/dark_yellow"
             android:dividerHeight="@dimen/list_view_divider_height"/>
+    -->
+    <fragment
+            android:name="com.example.myfirstappgit.CursorLoaderListFragment"
+            android:id="@+id/listconvo"
+            android:layout_weight="7"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:layout="@layout/fragment_layout"/>
 
     <!-- divider -->
     <View

@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -182,8 +183,9 @@ public class CursorLoaderListFragment extends ListFragment
             setListShownNoAnimation(true);
         }
 
-        final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
-        View v = inflater.inflate( R.layout.mylist, null, false);
+        //final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+
+        //View v = inflater.inflate( R.layout.activity_main, null, false);
 
         //failed attempt to show person's name
         /*while ( data.moveToNext() ){
@@ -192,6 +194,14 @@ public class CursorLoaderListFragment extends ListFragment
             personView = (TextView) v.findViewById(R.id.text2);
             personView.setText(person);
         }*/
+
+        if ( data.moveToNext() ) {
+            String address = data.getString(data.getColumnIndex("address"));
+            EditText txtPhoneNo = (EditText) getActivity().findViewById(R.id.txtPhoneNo);
+            txtPhoneNo.setText(address, TextView.BufferType.EDITABLE);
+        }
+
+
 
 
 

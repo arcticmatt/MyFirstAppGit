@@ -96,6 +96,7 @@ public class MainActivity extends Activity {
                 //---are added to the storage ArrayList
                 if (message.length() <= 160 && message.length() > 0) {
                     storedMessages.add(message);
+                    sendSMS(phoneNo, message);
                 }
 
                 //---creates an Array from the storage ArrayList

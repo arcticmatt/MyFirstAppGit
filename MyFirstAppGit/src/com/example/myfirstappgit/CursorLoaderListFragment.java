@@ -144,7 +144,7 @@ public class CursorLoaderListFragment extends ListFragment
         }*/
 
 
-        Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");
+        Uri mSmsinboxQueryUri = Uri.parse("content://sms");
         String[] columns = new String[] { "_id", "body" };
 
 
@@ -159,7 +159,7 @@ public class CursorLoaderListFragment extends ListFragment
 
 
         String someValue = Contacts.DISPLAY_NAME;
-        String select = "((" + "_id" + "=+19254706288))";
+        String select = "((" + "thread_id" + "=6))";
         return new CursorLoader(getActivity(), mSmsinboxQueryUri,
                 columns, null, null,
                 null);

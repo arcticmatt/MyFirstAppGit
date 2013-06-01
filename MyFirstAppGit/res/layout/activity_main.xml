@@ -9,7 +9,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".MainActivity"
         android:orientation="vertical"
-        android:background="@color/black"
+        android:background="@color/white"
         android:clickable="true">
 
     <!--
@@ -32,7 +32,8 @@
             android:layout_weight="7"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:layout="@layout/fragment_layout"/>
+            tools:layout="@layout/fragment_layout"
+            android:textColor="@color/white"/>
 
     <!-- divider -->
     <View
@@ -70,7 +71,6 @@
                 android:text="@string/button_send"
                 android:textSize="15dp"
                 android:background="@color/dark_yellow"/>
-
     </LinearLayout>
 
     <!-- divider -->

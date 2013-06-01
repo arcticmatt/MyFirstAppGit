@@ -1,3 +1,7 @@
+package com.example.myfirstappgit;
+
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -6,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +22,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.SearchView.OnQueryTextListener;
+import android.content.Context;
+import android.database.Cursor;
 
-import com.example.myfirstappgit.R;
 
 public class CursorLoaderListFragment extends ListFragment
         implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -28,13 +35,6 @@ public class CursorLoaderListFragment extends ListFragment
 
     // If non-null, this is the current filter the user has provided.
     String mCurFilter;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_layout, container, false);
-    }
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -46,10 +46,30 @@ public class CursorLoaderListFragment extends ListFragment
         // We have a menu item to show in action bar.
         setHasOptionsMenu(true);
 
+
+
+        Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");
+        Cursor cursor1 = getActivity().getContentResolver().query(mSmsinboxQueryUri,
+                new String[] { "_id", "thread_id", "address", "person", "date",
+                        "body", "type" }, null, null, null);
+        startManagingCursor(cursor1);
+        String[] columns = new String[] { "address", "person", "date", "body","type" };
+        if (cursor1.getCount() > 0) {
+            String count = Integer.toString(cursor1.getCount());
+            Log.e("Count",count);
+            while (cursor1.moveToNext()){
+                String address = cursor1.getString(cursor1.getColumnIndex(columns[0]));
+                String name = cursor1.getString(cursor1.getColumnIndex(columns[1]));
+                String date = cursor1.getString(cursor1.getColumnIndex(columns[2]));
+                String msg = cursor1.getString(cursor1.getColumnIndex(columns[3]));
+                String type = cursor1.getString(cursor1.getColumnIndex(columns[4]));
+            }
+        }
+
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_2, null,
-                new String[] { ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.CONTACT_STATUS },
+                new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
                 new int[] { android.R.id.text1, android.R.id.text2 }, 0);
         setListAdapter(mAdapter);
 
@@ -102,12 +122,12 @@ public class CursorLoaderListFragment extends ListFragment
 
     // These are the Contacts rows that we will retrieve.
     static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.Contacts.CONTACT_STATUS,
-            ContactsContract.Contacts.CONTACT_PRESENCE,
-            ContactsContract.Contacts.PHOTO_ID,
-            ContactsContract.Contacts.LOOKUP_KEY,
+            Contacts._ID,
+            Contacts.DISPLAY_NAME,
+            Contacts.CONTACT_STATUS,
+            Contacts.CONTACT_PRESENCE,
+            Contacts.PHOTO_ID,
+            Contacts.LOOKUP_KEY,
     };
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -117,20 +137,20 @@ public class CursorLoaderListFragment extends ListFragment
         // currently filtering.
         Uri baseUri;
         if (mCurFilter != null) {
-            baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,
+            baseUri = Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
                     Uri.encode(mCurFilter));
         } else {
-            baseUri = ContactsContract.Contacts.CONTENT_URI;
+            baseUri = Contacts.CONTENT_URI;
         }
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
-        String select = "((" + ContactsContract.Contacts.DISPLAY_NAME + " NOTNULL) AND ("
-                + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
-                + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";
+        String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
+                + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
+                + Contacts.DISPLAY_NAME + " != '' ))";
         return new CursorLoader(getActivity(), baseUri,
                 CONTACTS_SUMMARY_PROJECTION, select, null,
-                ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+                Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -153,3 +173,22 @@ public class CursorLoaderListFragment extends ListFragment
         mAdapter.swapCursor(null);
     }
 }
+
+/*Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");
+        Cursor cursor1 = getContentResolver().query(mSmsinboxQueryUri,
+                    new String[] { "_id", "thread_id", "address", "person", "date",
+                                    "body", "type" }, null, null, null);
+        startManagingCursor(cursor1);
+        String[] columns = new String[] { "address", "person", "date", "body","type" };
+        if (cursor1.getCount() > 0) {
+            String count = Integer.toString(cursor1.getCount());
+            Log.e("Count",count);
+            while (cursor1.moveToNext()){
+                String address = cursor1.getString(cursor1.getColumnIndex(columns[0]));
+                String name = cursor1.getString(cursor1.getColumnIndex(columns[1]));
+                String date = cursor1.getString(cursor1.getColumnIndex(columns[2]));
+                String msg = cursor1.getString(cursor1.getColumnIndex(columns[3]));
+                String type = cursor1.getString(cursor1.getColumnIndex(columns[4]));
+            }
+        }
+        */

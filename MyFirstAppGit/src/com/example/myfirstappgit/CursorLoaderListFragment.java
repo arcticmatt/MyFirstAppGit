@@ -25,10 +25,14 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnQueryTextListener;
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.TextView;
 
 
 public class CursorLoaderListFragment extends ListFragment
         implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
+
+    String columns[];
+    TextView personView;
 
     // This is the Adapter being used to display the list's data.
     SimpleCursorAdapter mAdapter;
@@ -41,7 +45,7 @@ public class CursorLoaderListFragment extends ListFragment
 
         // Give some text to display if there is no data.  In a real
         // application this would come from a resource.
-        setEmptyText("No phone numbers");
+        setEmptyText("No text messages");
 
         // We have a menu item to show in action bar.
         setHasOptionsMenu(true);
@@ -68,9 +72,9 @@ public class CursorLoaderListFragment extends ListFragment
 
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2, null,
-                new String[] { "_id", "body" },
-                new int[] { android.R.id.text1, android.R.id.text2 }, 0);
+                R.layout.mylist, null,
+                new String[] { "_id", "address", "body" },
+                new int[] { R.id.text1, R.id.text2, R.id.text3 }, 0);
         setListAdapter(mAdapter);
 
         // Start out with a progress indicator.
@@ -135,17 +139,17 @@ public class CursorLoaderListFragment extends ListFragment
         // sample only has one Loader, so we don't care about the ID.
         // First, pick the base URI to use depending on whether we are
         // currently filtering.
-        /*Uri baseUri;
+        Uri baseUri;
         if (mCurFilter != null) {
             baseUri = Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
                     Uri.encode(mCurFilter));
         } else {
             baseUri = Contacts.CONTENT_URI;
-        }*/
+        }
 
 
         Uri mSmsinboxQueryUri = Uri.parse("content://sms");
-        String[] columns = new String[] { "_id", "body" };
+        columns = new String[] { "_id", "address", "body" };
 
 
 
@@ -161,7 +165,7 @@ public class CursorLoaderListFragment extends ListFragment
         String someValue = Contacts.DISPLAY_NAME;
         String select = "((" + "thread_id" + "=6))";
         return new CursorLoader(getActivity(), mSmsinboxQueryUri,
-                columns, null, null,
+                columns, select, null,
                 null);
     }
 
@@ -170,12 +174,29 @@ public class CursorLoaderListFragment extends ListFragment
         // old cursor once we return.)
         mAdapter.swapCursor(data);
 
+
         // The list should now be shown.
         if (isResumed()) {
             setListShown(true);
         } else {
             setListShownNoAnimation(true);
         }
+
+        final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+        View v = inflater.inflate( R.layout.mylist, null, false);
+
+        //failed attempt to show person's name
+        /*while ( data.moveToNext() ){
+            String address = data.getString(data.getColumnIndex("address"));
+            String person = findNameByAddress(getActivity().getBaseContext(), address);
+            personView = (TextView) v.findViewById(R.id.text2);
+            personView.setText(person);
+        }*/
+
+
+
+
+
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -184,6 +205,41 @@ public class CursorLoaderListFragment extends ListFragment
         // longer using it.
         mAdapter.swapCursor(null);
     }
+
+    public String findNameByAddress(Context ct,String addr)
+    {
+        Uri myPerson = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                Uri.encode(addr));
+
+        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME };
+
+        Cursor cursor = ct.getContentResolver().query(myPerson,
+                projection, null, null, null);
+
+        if (cursor.moveToFirst()) {
+
+
+
+            String name=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+
+            Log.e("","Found contact name");
+
+            cursor.close();
+
+            return name;
+        }
+
+        cursor.close();
+        Log.e("","Not Found contact name");
+
+        return addr;
+    }
+
+
+
+
+
 }
 
 /*Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");

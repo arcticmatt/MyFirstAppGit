@@ -74,6 +74,31 @@ public class MainActivity extends Activity {
 
                     textCount.setTextColor(Color.RED);
                 } else textCount.setTextColor(Color.BLACK);
+
+            }
+
+            public void afterTextChanged(Editable s){}
+
+
+        };
+
+        final TextWatcher mTextEditorWatcher2 = new TextWatcher(){
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+
+                textCount.setText(String.valueOf(s.length()));
+                if(s.length() == 160){
+
+                    textCount.setTextColor(Color.RED);
+                } else textCount.setTextColor(Color.BLACK);
+
+
+                String phoneNo = txtPhoneNo.getText().toString();
+                String name = findNameByAddress(getBaseContext(), phoneNo);
+                TextView nameView = (TextView) findViewById(R.id.name);
+                nameView.setText(name);
+
             }
 
             public void afterTextChanged(Editable s){}
@@ -84,6 +109,7 @@ public class MainActivity extends Activity {
         //---adds a TextWatcher to the list of those whose methods are called
         //---whenever this TextView's text changes
         txtMessage.addTextChangedListener(mTextEditorWatcher);
+        txtPhoneNo.addTextChangedListener(mTextEditorWatcher2);
 
         //---used instead of android:onclick, in order to support more APIs
         btnSendSMS.setOnClickListener(new View.OnClickListener()
@@ -222,9 +248,8 @@ public class MainActivity extends Activity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
-        String sentTo = "+19256394576";
 
-        ContentValues values = new ContentValues();
+                ContentValues values = new ContentValues();
         //---only seems to work with the phoneNumber string and nothing else
         values.put("address", "to " + phoneNumber);
         values.put("body", message);
@@ -240,6 +265,36 @@ public class MainActivity extends Activity {
         //you CANNOT use an intent instead of PendingIntent (it will create an error)
         sms.sendTextMessage(phoneNumber, null, message, pi, null);
         */
+    }
+
+    public String findNameByAddress(Context ct,String addr)
+    {
+        Uri myPerson = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                Uri.encode(addr));
+
+        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME };
+
+        Cursor cursor = ct.getContentResolver().query(myPerson,
+                projection, null, null, null);
+
+        if (cursor.moveToFirst()) {
+
+
+
+            String name=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+
+            Log.e("","Found contact name");
+
+            cursor.close();
+
+            return name;
+        }
+
+        cursor.close();
+        Log.e("","Not Found contact name");
+
+        return addr;
     }
 
 }

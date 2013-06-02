@@ -225,7 +225,7 @@ public class MainActivity extends Activity {
         ContentValues values = new ContentValues();
         values.put("address", phoneNumber);
         values.put("body", message);
-        getContentResolver().insert(Uri.parse("content://sms"), values);
+        getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 
 
 

@@ -62,7 +62,7 @@
                 android:clickable="false"
                 android:background="@color/white"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black"/>
+                android:textColorHint="@android:color/darker_gray"/>
 
         <Button
                 android:id="@+id/btnSendSMS"
@@ -85,15 +85,14 @@
     <EditText
             android:id="@+id/txtMessage"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin_small"
             android:gravity="top"
             android:hint="@string/edit_message"
             android:maxLength="160"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:background="@color/white"/>
 
     <!-- divider -->
@@ -108,7 +107,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:textSize="20dp"
+            android:textSize="12dp"
             android:text="@string/counter_start"
             android:gravity="center_vertical|right"
             android:paddingRight="10dp"

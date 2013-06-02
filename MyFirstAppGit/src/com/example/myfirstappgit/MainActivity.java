@@ -223,7 +223,7 @@ public class MainActivity extends Activity {
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
         ContentValues values = new ContentValues();
-        values.put("address", phoneNumber);
+        values.put("address", "to" + phoneNumber);
         values.put("body", message);
         getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 

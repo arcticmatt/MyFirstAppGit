@@ -140,16 +140,16 @@ public class CursorLoaderListFragment extends ListFragment
         // sample only has one Loader, so we don't care about the ID.
         // First, pick the base URI to use depending on whether we are
         // currently filtering.
-        Uri baseUri;
+        /*Uri baseUri;
         if (mCurFilter != null) {
             baseUri = Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
                     Uri.encode(mCurFilter));
         } else {
             baseUri = Contacts.CONTENT_URI;
-        }
+        }*/
 
 
-        Uri mSmsinboxQueryUri = Uri.parse("content://sms");
+        Uri mSmsinboxQueryUri = Uri.parse("content://sms/sent");
         columns = new String[] { "_id", "address", "body" };
 
 
@@ -162,9 +162,7 @@ public class CursorLoaderListFragment extends ListFragment
                 + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + Contacts.DISPLAY_NAME + " != '' ))";
 
-
-        String someValue = Contacts.DISPLAY_NAME;
-        String select = "((" + "thread_id" + "=6))";
+        String select = "((" + "thread_id" + "=4))";
         return new CursorLoader(getActivity(), mSmsinboxQueryUri,
                 columns, select, null,
                 null);
@@ -197,6 +195,12 @@ public class CursorLoaderListFragment extends ListFragment
 
         if ( data.moveToNext() ) {
             String address = data.getString(data.getColumnIndex("address"));
+            for (int i=0; i<address.length(); i++) {
+                if (address.charAt(i) == ('-')) {
+                    address = address.substring(0, i) + address.substring(i+1);
+                    i--;
+                }
+            }
             EditText txtPhoneNo = (EditText) getActivity().findViewById(R.id.txtPhoneNo);
             txtPhoneNo.setText(address, TextView.BufferType.EDITABLE);
         }

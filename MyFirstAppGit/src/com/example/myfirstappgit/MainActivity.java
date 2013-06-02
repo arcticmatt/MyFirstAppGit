@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     Button btnSendSMS;
     EditText txtPhoneNo;
     EditText txtMessage;
-    protected ArrayList <String> storedMessages = new ArrayList<String>();
+
     private TextView textCount;
 
 
@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
                 if(s.length() == 160){
 
                     textCount.setTextColor(Color.RED);
-                } else textCount.setTextColor(Color.WHITE);
+                } else textCount.setTextColor(Color.BLACK);
             }
 
             public void afterTextChanged(Editable s){}
@@ -92,15 +92,6 @@ public class MainActivity extends Activity {
                 String phoneNo = txtPhoneNo.getText().toString();
                 String message = txtMessage.getText().toString();
 
-                //---ensures that only messages that meet the char limit
-                //---are added to the storage ArrayList
-                if (message.length() <= 160 && message.length() > 0) {
-                    storedMessages.add(message);
-                    sendSMS(phoneNo, message);
-                }
-
-                //---creates an Array from the storage ArrayList
-                String[] messageArray = listToArray(storedMessages);
 
                 //---ensures that only messages that meet the char limit
                 //---are sent and shown
@@ -242,6 +233,21 @@ public class MainActivity extends Activity {
         sms.sendTextMessage(phoneNumber, null, message, pi, null);
         */
 
+        Intent i = new Intent(this, MainActivity.class);
+            /*
+            FLAG_ACTIVITY_SINGLE_TOP - If set, the activity will not be
+            launched if it is already running at the top of the history stack.
+
+            FLAG_ACTIVITY_NEW_TASK - a final int, that, if set, this activity
+            will become the start of a new task on this history stack.
+            If a task is already running for the activity you are now starting,
+            then a new activity will not be started; instead, the current task will
+             simply be brought to the front of the screen with the state it was last in.
+             */
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("message", message);
+        startActivity(i);
+
     }
 
     //---This is a simple method I composed that turns ArrayLists
@@ -258,154 +264,5 @@ public class MainActivity extends Activity {
 
     }
 
-
-    public static class CursorLoaderListFragment extends ListFragment
-            implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
-
-        // This is the Adapter being used to display the list's data.
-        SimpleCursorAdapter mAdapter;
-
-        // If non-null, this is the current filter the user has provided.
-        String mCurFilter;
-
-        @Override public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            // Give some text to display if there is no data.  In a real
-            // application this would come from a resource.
-            setEmptyText("No phone numbers");
-
-            // We have a menu item to show in action bar.
-            setHasOptionsMenu(true);
-
-            // Create an empty adapter we will use to display the loaded data.
-            mAdapter = new SimpleCursorAdapter(getActivity(),
-                    android.R.layout.simple_list_item_2, null,
-                    new String[] { "person", "body" },
-                    new int[] { android.R.id.text1, android.R.id.text2 }, 0);
-            setListAdapter(mAdapter);
-
-            // Start out with a progress indicator.
-            setListShown(false);
-
-            // Prepare the loader.  Either re-connect with an existing one,
-            // or start a new one.
-            getLoaderManager().initLoader(0, null, this);
-        }
-
-        @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            // Place an action bar item for searching.
-            MenuItem item = menu.add("Search");
-            item.setIcon(android.R.drawable.ic_menu_search);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
-                    | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-            SearchView sv = new SearchView(getActivity());
-            sv.setOnQueryTextListener(this);
-            item.setActionView(sv);
-        }
-
-        public boolean onQueryTextChange(String newText) {
-            // Called when the action bar search text has changed.  Update
-            // the search filter, and restart the loader to do a new query
-            // with this filter.
-            String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
-            // Don't do anything if the filter hasn't actually changed.
-            // Prevents restarting the loader when restoring state.
-            if (mCurFilter == null && newFilter == null) {
-                return true;
-            }
-            if (mCurFilter != null && mCurFilter.equals(newFilter)) {
-                return true;
-            }
-            mCurFilter = newFilter;
-            getLoaderManager().restartLoader(0, null, this);
-            return true;
-        }
-
-        @Override public boolean onQueryTextSubmit(String query) {
-            // Don't care about this.
-            return true;
-        }
-
-        @Override public void onListItemClick(ListView l, View v, int position, long id) {
-            // Insert desired behavior here.
-            Log.i("FragmentComplexList", "Item clicked: " + id);
-        }
-
-        // These are the Contacts rows that we will retrieve.
-        /*static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.Contacts.CONTACT_STATUS,
-                ContactsContract.Contacts.CONTACT_PRESENCE,
-                ContactsContract.Contacts.PHOTO_ID,
-                ContactsContract.Contacts.LOOKUP_KEY,
-        };*/
-
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            // This is called when a new Loader needs to be created.  This
-            // sample only has one Loader, so we don't care about the ID.
-            // First, pick the base URI to use depending on whether we are
-            // currently filtering.
-
-
-            /*Uri baseUri;
-            if (mCurFilter != null) {
-                baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,
-                        Uri.encode(mCurFilter));
-            } else {
-                baseUri = ContactsContract.Contacts.CONTENT_URI;
-            }*/
-
-            Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");
-            /*Cursor cursor1 = getContentResolver().query(mSmsinboxQueryUri,
-                    new String[] { "_id", "thread_id", "address", "person", "date",
-                            "body", "type" }, null, null, null);
-            startManagingCursor(cursor1);*/
-            String[] columns = new String[] { "person", "body" };
-            /*if (cursor1.getCount() > 0) {
-                String count = Integer.toString(cursor1.getCount());
-                Log.e("Count",count);
-                while (cursor1.moveToNext()){
-                    String address = cursor1.getString(cursor1.getColumnIndex(columns[0]));
-                    String name = cursor1.getString(cursor1.getColumnIndex(columns[1]));
-                    String date = cursor1.getString(cursor1.getColumnIndex(columns[2]));
-                    String msg = cursor1.getString(cursor1.getColumnIndex(columns[3]));
-                    String type = cursor1.getString(cursor1.getColumnIndex(columns[4]));
-                }
-            }*/
-
-
-            // Now create and return a CursorLoader that will take care of
-            // creating a Cursor for the data being displayed.
-
-            /*String select = "((" + ContactsContract.Contacts.DISPLAY_NAME + " NOTNULL) AND ("
-                    + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
-                    + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";*/
-            return new CursorLoader(getActivity(), mSmsinboxQueryUri,
-                    new String[] {"person", "body"}, null, null,
-                    null);
-        }
-
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            // Swap the new cursor in.  (The framework will take care of closing the
-            // old cursor once we return.)
-            mAdapter.swapCursor(data);
-
-            // The list should now be shown.
-            if (isResumed()) {
-                setListShown(true);
-            } else {
-                setListShownNoAnimation(true);
-            }
-        }
-
-        public void onLoaderReset(Loader<Cursor> loader) {
-            // This is called when the last Cursor provided to onLoadFinished()
-            // above is about to be closed.  We need to make sure we are no
-            // longer using it.
-            mAdapter.swapCursor(null);
-        }
-    }
 
 }

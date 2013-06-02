@@ -43,6 +43,13 @@
                 android:layout_marginLeft="5dp"
                 android:textSize="5dp"
                 />
+        <TextView
+                android:id="@+id/text4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="15dp"
+                />
     </LinearLayout>
 
     <TextView

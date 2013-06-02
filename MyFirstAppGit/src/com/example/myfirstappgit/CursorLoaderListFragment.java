@@ -176,17 +176,17 @@ public class CursorLoaderListFragment extends ListFragment
             setListShownNoAnimation(true);
         }
 
-        //final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+        final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
 
-        //View v = inflater.inflate( R.layout.activity_main, null, false);
+        View v = inflater.inflate( R.layout.mylist, null, false);
 
         //failed attempt to show person's name
-        /*while ( data.moveToNext() ){
+        if ( data.moveToNext() ){
             String address = data.getString(data.getColumnIndex("address"));
             String person = findNameByAddress(getActivity().getBaseContext(), address);
-            personView = (TextView) v.findViewById(R.id.text2);
+            personView = (TextView) v.findViewById(R.id.text4);
             personView.setText(person);
-        }*/
+        }
 
         if ( data.moveToFirst() ) {
             String address = data.getString(data.getColumnIndex("address"));

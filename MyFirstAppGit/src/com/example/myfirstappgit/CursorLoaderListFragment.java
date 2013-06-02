@@ -74,7 +74,7 @@ public class CursorLoaderListFragment extends ListFragment
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.mylist, null,
-                new String[] { "_id", "address", "body" },
+                new String[] { "address", "_id", "body" },
                 new int[] { R.id.text1, R.id.text2, R.id.text3 }, 0);
         setListAdapter(mAdapter);
 
@@ -149,7 +149,7 @@ public class CursorLoaderListFragment extends ListFragment
         }*/
 
         Uri mSmsinboxQueryUri = Uri.parse("content://sms");
-        columns = new String[] { "_id", "address", "body" };
+        columns = new String[] { "address", "_id", "body" };
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.

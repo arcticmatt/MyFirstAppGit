@@ -35,13 +35,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                />
+                android:textColor="@color/gray"/>
         <TextView
                 android:id="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="5dp"
                 />
     </LinearLayout>
 

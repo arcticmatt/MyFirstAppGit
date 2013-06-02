@@ -222,8 +222,10 @@ public class MainActivity extends Activity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
+        String sentTo = "to" + phoneNumber;
+
         ContentValues values = new ContentValues();
-        values.put("address", "to" + phoneNumber);
+        values.put("address", sentTo);
         values.put("body", message);
         getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 

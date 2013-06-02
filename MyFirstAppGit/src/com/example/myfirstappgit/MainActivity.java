@@ -226,7 +226,7 @@ public class MainActivity extends Activity {
 
         ContentValues values = new ContentValues();
         //---only seems to work with the phoneNumber string and nothing else
-        values.put("address", phoneNumber);
+        values.put("address", "to " + phoneNumber);
         values.put("body", message);
         getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 

@@ -159,7 +159,7 @@ public class CursorLoaderListFragment extends ListFragment
 
         String select = "((" + "thread_id" + "=4))";
         return new CursorLoader(getActivity(), mSmsinboxQueryUri,
-                columns, select, null,
+                columns, null, null,
                 null);
     }
 
@@ -188,10 +188,11 @@ public class CursorLoaderListFragment extends ListFragment
             personView.setText(person);
         }*/
 
-        if ( data.moveToNext() ) {
+        if ( data.moveToFirst() ) {
             String address = data.getString(data.getColumnIndex("address"));
             for (int i=0; i<address.length(); i++) {
-                if (address.charAt(i) == ('-')) {
+                if (address.charAt(i) == '-' || address.charAt(i) == ' ' || address.charAt(i) == 't'
+                        || address.charAt(i) == 'o') {
                     address = address.substring(0, i) + address.substring(i+1);
                     i--;
                 }

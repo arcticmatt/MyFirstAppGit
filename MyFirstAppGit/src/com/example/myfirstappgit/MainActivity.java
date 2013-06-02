@@ -222,10 +222,11 @@ public class MainActivity extends Activity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
-        String sentTo = "to" + phoneNumber;
+        String sentTo = "+19256394576";
 
         ContentValues values = new ContentValues();
-        values.put("address", sentTo);
+        //---only seems to work with the phoneNumber string and nothing else
+        values.put("address", phoneNumber);
         values.put("body", message);
         getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 

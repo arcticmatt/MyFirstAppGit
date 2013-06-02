@@ -148,13 +148,8 @@ public class CursorLoaderListFragment extends ListFragment
             baseUri = Contacts.CONTENT_URI;
         }*/
 
-
-        Uri mSmsinboxQueryUri = Uri.parse("content://sms/sent");
+        Uri mSmsinboxQueryUri = Uri.parse("content://sms");
         columns = new String[] { "_id", "address", "body" };
-
-
-
-
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
@@ -204,13 +199,6 @@ public class CursorLoaderListFragment extends ListFragment
             EditText txtPhoneNo = (EditText) getActivity().findViewById(R.id.txtPhoneNo);
             txtPhoneNo.setText(address, TextView.BufferType.EDITABLE);
         }
-
-
-
-
-
-
-
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {

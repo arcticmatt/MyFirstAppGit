@@ -5,6 +5,7 @@ import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -98,7 +99,6 @@ public class MainActivity extends Activity {
                 if (phoneNo.length() > 0 && message.length() > 0 && message.length() <= 160)
                 {
                     sendSMS(phoneNo, message);
-                    //showMessage(messageArray);
                     txtMessage.setText(R.string.blank_string);
 
                 }
@@ -222,6 +222,11 @@ public class MainActivity extends Activity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
+        ContentValues values = new ContentValues();
+        values.put("address", phoneNumber);
+        values.put("body", message);
+        getContentResolver().insert(Uri.parse("content://sms"), values);
+
 
 
         // this is the simpler version
@@ -232,37 +237,6 @@ public class MainActivity extends Activity {
         //you CANNOT use an intent instead of PendingIntent (it will create an error)
         sms.sendTextMessage(phoneNumber, null, message, pi, null);
         */
-
-        Intent i = new Intent(this, MainActivity.class);
-            /*
-            FLAG_ACTIVITY_SINGLE_TOP - If set, the activity will not be
-            launched if it is already running at the top of the history stack.
-
-            FLAG_ACTIVITY_NEW_TASK - a final int, that, if set, this activity
-            will become the start of a new task on this history stack.
-            If a task is already running for the activity you are now starting,
-            then a new activity will not be started; instead, the current task will
-             simply be brought to the front of the screen with the state it was last in.
-             */
-        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.putExtra("message", message);
-        startActivity(i);
-
     }
-
-    //---This is a simple method I composed that turns ArrayLists
-    //---into Arrays. The Array is to be used for ListView.
-    public String[] listToArray(ArrayList<String> storageArrayList)
-    {
-
-        String[] arrayStoredMessages = new String[storageArrayList.size()];
-        for (int i=0; i<storageArrayList.size(); i++)
-        {
-            arrayStoredMessages[i] = storageArrayList.get(i);
-        }
-        return arrayStoredMessages;
-
-    }
-
 
 }

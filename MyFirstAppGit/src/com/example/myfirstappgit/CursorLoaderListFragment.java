@@ -181,12 +181,23 @@ public class CursorLoaderListFragment extends ListFragment
         View v = inflater.inflate( R.layout.mylist, null, false);
 
         //failed attempt to show person's name
-        if ( data.moveToNext() ){
+        /*if ( data.moveToNext() ){
             String address = data.getString(data.getColumnIndex("address"));
             String person = findNameByAddress(getActivity().getBaseContext(), address);
             personView = (TextView) v.findViewById(R.id.text4);
             personView.setText(person);
-        }
+        }*/
+
+
+        //failed attempt to change text color of sent messages
+        /*while ( data.moveToNext() ) {
+            TextView addressView = (TextView) v.findViewById(R.id.text1);
+            if (addressView.getText().subSequence(0,2).equals("to")) {
+                addressView.setTextColor(R.color.dark_red);
+            }
+
+        }*/
+
 
         if ( data.moveToFirst() ) {
             String address = data.getString(data.getColumnIndex("address"));

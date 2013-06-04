@@ -33,7 +33,8 @@ import android.widget.*;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     public final static String EXTRA_MESSAGE = "com.example.myfirstappgit.MESSAGE";
@@ -42,6 +43,14 @@ public class MainActivity extends Activity {
     EditText txtMessage;
 
     private TextView textCount;
+
+    // This is the Adapter being used to display the list's data.
+    SimpleCursorAdapter contactsAdapter;
+
+    // If non-null, this is the current filter the user has provided.
+    String mCurFilter;
+
+    AutoCompleteTextView contactsView;
 
 
 
@@ -54,6 +63,20 @@ public class MainActivity extends Activity {
         //txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
         textCount = (TextView) findViewById(R.id.charCounter);
+
+
+        // Create an empty adapter we will use to display the loaded data.
+        contactsAdapter = new SimpleCursorAdapter(this,
+                R.layout.auto_complete, null,
+                new String[]{ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
+                new int[]{R.id.name, R.id.number}, 0);
+
+
+        // Prepare the loader.  Either re-connect with an existing one,
+        // or start a new one.
+        getLoaderManager().initLoader(1, null, this);
+
+
 
 
         /*
@@ -272,6 +295,62 @@ public class MainActivity extends Activity {
         Log.e("","Not Found contact name");
 
         return addr;
+    }
+
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // This is called when a new Loader needs to be created.  This
+        // sample only has one Loader, so we don't care about the ID.
+        // First, pick the base URI to use depending on whether we are
+        // currently filtering.
+        Uri baseUri;
+        if (mCurFilter != null) {
+            baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,
+                    Uri.encode(mCurFilter));
+        } else {
+            baseUri = ContactsContract.Contacts.CONTENT_URI;
+        }
+
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
+        String select = "((" + ContactsContract.Contacts.DISPLAY_NAME + " NOTNULL) AND ("
+                + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
+                + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";
+        return new CursorLoader(this, baseUri,
+                new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
+                select, null, ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+    }
+
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
+        // old cursor once we return.)
+        contactsAdapter.swapCursor(data);
+
+        contactsAdapter.setStringConversionColumn(data.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+
+        contactsAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            @Override
+            public Cursor runQuery(CharSequence constraint) {
+                String partialItemName = null;
+                if (constraint != null) {
+                    partialItemName = constraint.toString();
+                }
+                return ;
+            }
+        });
+
+        CustomAutoComplete textView =
+                (CustomAutoComplete) findViewById(R.id.mmWhoNo);
+
+
+        textView.setAdapter(contactsAdapter);
+
+    }
+
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed.  We need to make sure we are no
+        // longer using it.
+        contactsAdapter.swapCursor(null);
     }
 
 }

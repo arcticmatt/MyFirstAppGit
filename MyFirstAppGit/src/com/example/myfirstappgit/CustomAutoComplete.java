@@ -40,6 +40,7 @@ public class CustomAutoComplete extends AutoCompleteTextView {
     }
 
     /**
+     * After a selection, capture the new value and append to the existing
      * text
      */
     @Override

@@ -11,14 +11,13 @@
         android:orientation="vertical"
         android:background="@color/white"
         android:clickable="true">
-    <fragment
-            android:name="com.example.myfirstappgit.ContactsFragment"
-            android:id="@+id/listcontacts"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/send_button_height"
-            android:textColor="@color/white"
-            android:hint="@string/send_to"
-            tools:layout="@layout/contact_list"/>
+    <com.example.myfirstappgit.CustomAutoComplete
+            android:id="@+id/mmWhoNo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="To...."
+            android:singleLine="false">
+    </com.example.myfirstappgit.CustomAutoComplete>
     <!-- divider -->
     <View
             android:layout_width="fill_parent"

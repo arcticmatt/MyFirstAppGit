@@ -16,7 +16,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="To...."
-            android:singleLine="false">
+            android:singleLine="false"
+            android:background="@color/white">
     </AutoCompleteTextView>
     <!-- divider -->
     <View

@@ -208,8 +208,8 @@ public class CursorLoaderListFragment extends ListFragment
                     i--;
                 }
             }
-            EditText txtPhoneNo = (EditText) getActivity().findViewById(R.id.txtPhoneNo);
-            txtPhoneNo.setText(address, TextView.BufferType.EDITABLE);
+            //EditText txtPhoneNo = (EditText) getActivity().findViewById(R.id.txtPhoneNo);
+            //txtPhoneNo.setText(address, TextView.BufferType.EDITABLE);
         }
     }
 

@@ -51,9 +51,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
-        txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
+        //txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
         textCount = (TextView) findViewById(R.id.charCounter);
+
 
         /*
         TextWatcher is an interface. The new TextWatcher, therefore,
@@ -82,49 +83,25 @@ public class MainActivity extends Activity {
 
         };
 
-        final TextWatcher mTextEditorWatcher2 = new TextWatcher(){
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
-            public void onTextChanged(CharSequence s, int start, int before, int count){
-
-                textCount.setText(String.valueOf(s.length()));
-                if(s.length() == 160){
-
-                    textCount.setTextColor(Color.RED);
-                } else textCount.setTextColor(Color.BLACK);
-
-
-                String phoneNo = txtPhoneNo.getText().toString();
-                String name = findNameByAddress(getBaseContext(), phoneNo);
-                TextView nameView = (TextView) findViewById(R.id.name);
-                nameView.setText(name);
-
-            }
-
-            public void afterTextChanged(Editable s){}
-
-
-        };
 
         //---adds a TextWatcher to the list of those whose methods are called
         //---whenever this TextView's text changes
         txtMessage.addTextChangedListener(mTextEditorWatcher);
-        txtPhoneNo.addTextChangedListener(mTextEditorWatcher2);
 
         //---used instead of android:onclick, in order to support more APIs
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
-                String phoneNo = txtPhoneNo.getText().toString();
                 String message = txtMessage.getText().toString();
 
 
                 //---ensures that only messages that meet the char limit
                 //---are sent and shown
-                if (phoneNo.length() > 0 && message.length() > 0 && message.length() <= 160)
+                if (message.length() > 0 && message.length() <= 160)
                 {
-                    sendSMS(phoneNo, message);
+                    //sendSMS(phoneNo, message);
                     txtMessage.setText(R.string.blank_string);
 
                 }

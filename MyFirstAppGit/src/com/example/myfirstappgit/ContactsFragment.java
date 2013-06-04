@@ -94,9 +94,9 @@ public class ContactsFragment extends Fragment
 
         // Create an empty adapter we will use to display the loaded data.
         contactsAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_1, null,
-                new String[]{Contacts.DISPLAY_NAME},
-                new int[]{android.R.id.text1}, 0);
+                android.R.layout.select_dialog_item, null,
+                new String[]{ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
+                new int[]{android.R.id.text1, android.R.id.text2}, 0);
 
 
         // Prepare the loader.  Either re-connect with an existing one,
@@ -141,8 +141,8 @@ public class ContactsFragment extends Fragment
                 + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";
         return new CursorLoader(getActivity(), baseUri,
-                new String[] {Contacts.DISPLAY_NAME},
-                null, null, null);
+                new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
+                null, null, select);
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -150,13 +150,13 @@ public class ContactsFragment extends Fragment
         // old cursor once we return.)
         contactsAdapter.swapCursor(data);
 
-        //final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+        final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
 
-        //View v = inflater.inflate( R.layout.contact_list, null, false);
+        View v = inflater.inflate( R.layout.contact_list, null, false);
 
-        //AutoCompleteTextView textView = (AutoCompleteTextView) getView().findViewById(R.id.contacts);
+        AutoCompleteTextView textView = (AutoCompleteTextView) v.findViewById(R.id.contacts);
 
-        //textView.setAdapter(contactsAdapter);
+        textView.setAdapter(contactsAdapter);
 
     }
 

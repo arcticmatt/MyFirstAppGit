@@ -14,7 +14,7 @@
     <fragment
             android:name="com.example.myfirstappgit.ContactsFragment"
             android:id="@+id/listcontacts"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/send_button_height"
             android:textColor="@color/white"
             android:hint="@string/send_to"

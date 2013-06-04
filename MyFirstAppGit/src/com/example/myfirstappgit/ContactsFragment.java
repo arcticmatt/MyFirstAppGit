@@ -94,9 +94,9 @@ public class ContactsFragment extends Fragment
 
         // Create an empty adapter we will use to display the loaded data.
         contactsAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.select_dialog_item, null,
-                new String[]{ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
-                new int[]{android.R.id.text1, android.R.id.text2}, 0);
+                R.layout.auto_complete, null,
+                new String[]{Contacts.DISPLAY_NAME, Contacts._ID},
+                new int[]{R.id.name, R.id.number}, 0);
 
 
         // Prepare the loader.  Either re-connect with an existing one,
@@ -129,7 +129,7 @@ public class ContactsFragment extends Fragment
         // currently filtering.
         Uri baseUri;
         if (mCurFilter != null) {
-            baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,
+            baseUri = Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
                     Uri.encode(mCurFilter));
         } else {
             baseUri = ContactsContract.Contacts.CONTENT_URI;
@@ -141,8 +141,8 @@ public class ContactsFragment extends Fragment
                 + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";
         return new CursorLoader(getActivity(), baseUri,
-                new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
-                null, null, select);
+                new String[] {Contacts.DISPLAY_NAME, Contacts._ID},
+                null, null, null);
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -154,7 +154,10 @@ public class ContactsFragment extends Fragment
 
         View v = inflater.inflate( R.layout.contact_list, null, false);
 
-        AutoCompleteTextView textView = (AutoCompleteTextView) v.findViewById(R.id.contacts);
+        com.example.myfirstappgit.CustomAutoComplete textView =
+                (com.example.myfirstappgit.CustomAutoComplete) v.findViewById(R.id.contacts);
+
+        textView.setAdapter(contactsAdapter);
 
         textView.setAdapter(contactsAdapter);
 

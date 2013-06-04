@@ -39,12 +39,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.provider.ContactsContract.Contacts;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ContactsFragment extends Fragment
@@ -57,6 +63,10 @@ public class ContactsFragment extends Fragment
     String mCurFilter;
 
     AutoCompleteTextView contactsView;
+
+    private ArrayList<Map<String, String>> mPeopleList;
+    private SimpleAdapter mAdapter;
+    private AutoCompleteTextView mTxtPhoneNo;
 
 
     @Override
@@ -74,12 +84,14 @@ public class ContactsFragment extends Fragment
 
 
 
-        // Create an empty adapter we will use to display the loaded data.
+
+
+        /*// Create an empty adapter we will use to display the loaded data.
         contactsAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.auto_complete, null,
                 new String[]{Contacts.DISPLAY_NAME, Contacts._ID},
                 new int[]{R.id.name, R.id.number}, 0);
-
+*/
 
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
@@ -123,28 +135,106 @@ public class ContactsFragment extends Fragment
                 + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";
         return new CursorLoader(getActivity(), baseUri,
-                new String[] {Contacts.DISPLAY_NAME, Contacts._ID},
+                null,
                 null, null, null);
     }
 
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor people) {
         // Swap the new cursor in.  (The framework will take care of closing the
         // old cursor once we return.)
-        contactsAdapter.swapCursor(data);
+        //contactsAdapter.swapCursor(data);
 
-        contactsAdapter.setStringConversionColumn(data.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
+        //contactsAdapter.setStringConversionColumn(data.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
 
         final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
 
         View v = inflater.inflate( R.layout.contact_list, null, false);
 
-        com.example.myfirstappgit.CustomAutoComplete textView =
-                (com.example.myfirstappgit.CustomAutoComplete) v.findViewById(R.id.contacts);
+        //com.example.myfirstappgit.CustomAutoComplete textView =
+                //(com.example.myfirstappgit.CustomAutoComplete) v.findViewById(R.id.contacts);
 
 
-        textView.setAdapter(contactsAdapter);
+        //textView.setAdapter(contactsAdapter);
 
-        textView.setAdapter(contactsAdapter);
+        //textView.setAdapter(contactsAdapter);
+
+
+        mPeopleList = new ArrayList<Map<String, String>>();
+        //PopulatePeopleList();
+        //mTxtPhoneNo = (AutoCompleteTextView) findViewById(R.id.contacts);
+
+
+        while (people.moveToNext()) {
+            String contactName = people.getString(people
+                    .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            String contactId = people.getString(people
+                    .getColumnIndex(ContactsContract.Contacts._ID));
+            String hasPhone = people
+                    .getString(people
+                            .getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+            if ((Integer.parseInt(hasPhone) > 0)){
+                // You know have the number so now query it like this
+                Cursor phones = getActivity().getContentResolver().query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ contactId,
+                        null, null);
+                while (phones.moveToNext()){
+                    //store numbers and display a dialog letting the user select which.
+                    String phoneNumber = phones.getString(
+                            phones.getColumnIndex(
+                                    ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String numberType = phones.getString(phones.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.TYPE));
+                    Map<String, String> NamePhoneType = new HashMap<String, String>();
+                    NamePhoneType.put("Name", contactName);
+                    NamePhoneType.put("Phone", phoneNumber);
+                    if(numberType.equals("0"))
+                        NamePhoneType.put("Type", "Work");
+                    else
+                    if(numberType.equals("1"))
+                        NamePhoneType.put("Type", "Home");
+                    else if(numberType.equals("2"))
+                        NamePhoneType.put("Type",  "Mobile");
+                    else
+                        NamePhoneType.put("Type", "Other");
+                    //Then add this map to the list.
+                    mPeopleList.add(NamePhoneType);
+                }
+                phones.close();
+            }
+        }
+        people.close();
+        //startManagingCursor(people);
+
+        mTxtPhoneNo = (AutoCompleteTextView) v.findViewById(R.id.contacts);
+
+
+
+        mTxtPhoneNo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> av, View arg1, int index,
+                                    long arg3) {
+                Map<String, String> map = (Map<String, String>) av.getItemAtPosition(index);
+
+                String name  = map.get("Name");
+                String number = map.get("Phone");
+                mTxtPhoneNo.setText(""+name+"<"+number+">");
+
+            }
+
+
+
+        });
+
+        mAdapter = new SimpleAdapter(getActivity(), mPeopleList, R.layout.custcontview,
+                new String[] { "Name", "Phone", "Type" }, new int[] {
+                R.id.ccontName, R.id.ccontNo, R.id.ccontType });
+        mTxtPhoneNo.setAdapter(mAdapter);
+
+
 
     }
 

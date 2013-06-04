@@ -45,9 +45,9 @@ public class MainActivity extends Activity {
 
     private TextView textCount;
 
-    private ArrayList<Map<String, String>> mPeopleList;
+/*    private ArrayList<Map<String, String>> mPeopleList;
     private SimpleAdapter mAdapter;
-    private AutoCompleteTextView mTxtPhoneNo;
+    private AutoCompleteTextView mTxtPhoneNo;*/
 
 
 
@@ -62,9 +62,9 @@ public class MainActivity extends Activity {
         textCount = (TextView) findViewById(R.id.charCounter);
 
 
-        mPeopleList = new ArrayList<Map<String, String>>();
+        /*mPeopleList = new ArrayList<Map<String, String>>();
         PopulatePeopleList();
-        mTxtPhoneNo = (AutoCompleteTextView) findViewById(R.id.mmWhoNo);
+        mTxtPhoneNo = (AutoCompleteTextView) findViewById(R.id.contacts);
 
         mTxtPhoneNo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
                 new String[] { "Name", "Phone", "Type" }, new int[] {
                 R.id.ccontName, R.id.ccontNo, R.id.ccontType });
         mTxtPhoneNo.setAdapter(mAdapter);
-
+*/
 
         /*
         TextWatcher is an interface. The new TextWatcher, therefore,
@@ -306,7 +306,7 @@ public class MainActivity extends Activity {
 
         return addr;
     }
-    public void PopulatePeopleList() {
+    /*public void PopulatePeopleList() {
         mPeopleList.clear();
         Cursor people = getContentResolver().query(
                 ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -355,6 +355,6 @@ public class MainActivity extends Activity {
         startManagingCursor(people);
 
 
-    }
+    }*/
 
 }

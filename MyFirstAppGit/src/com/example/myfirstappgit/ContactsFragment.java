@@ -40,29 +40,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.ListFragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.SearchView.OnQueryTextListener;
 
 
 public class ContactsFragment extends Fragment
@@ -150,12 +132,15 @@ public class ContactsFragment extends Fragment
         // old cursor once we return.)
         contactsAdapter.swapCursor(data);
 
+        contactsAdapter.setStringConversionColumn(data.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
+
         final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
 
         View v = inflater.inflate( R.layout.contact_list, null, false);
 
         com.example.myfirstappgit.CustomAutoComplete textView =
                 (com.example.myfirstappgit.CustomAutoComplete) v.findViewById(R.id.contacts);
+
 
         textView.setAdapter(contactsAdapter);
 

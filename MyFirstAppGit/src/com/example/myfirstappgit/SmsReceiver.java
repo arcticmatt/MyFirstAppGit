@@ -3,8 +3,12 @@ package com.example.myfirstappgit;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -56,7 +60,7 @@ public class SmsReceiver extends BroadcastReceiver {
         //---convert it to a string
         if (bundle != null)
         {
-            String receivedMessage = convertBundleToString(bundle);
+            String receivedMessage = convertBundleToString(bundle, context);
             //---display the new SMS message---
             Toast.makeText(context, receivedMessage, Toast.LENGTH_SHORT).show();
             Intent i = new Intent(context, MainActivity.class);
@@ -78,7 +82,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 
     //---This method takes in a Bundle and converts it to a String
-    protected String convertBundleToString (Bundle bundleFromIntent) {
+    protected String convertBundleToString (Bundle bundleFromIntent, Context context) {
         String str = "";
         /*
         The get(String key) method of Bundle class returns the entry
@@ -95,6 +99,8 @@ public class SmsReceiver extends BroadcastReceiver {
         SmsMessage[] msgs = new SmsMessage[pdus.length];
         for (int i=0; i<msgs.length; i++)
         {
+
+
             /*
             Takes the first element of Array msgs and sets it to
             equal an Sms object. The Sms object is created by the
@@ -106,10 +112,32 @@ public class SmsReceiver extends BroadcastReceiver {
             PARAMETER
              */
             msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
-            str += "SMS from " + msgs[i].getOriginatingAddress();
+            String name = findNameByAddress(context, msgs[i].getOriginatingAddress());
+            str += "SMS from " + name;
             str += ": ";
             str += msgs[i].getMessageBody().toString();
         }
         return str;
+    }
+
+    public String findNameByAddress(Context ct,String addr)
+    {
+        Uri myPerson = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                Uri.encode(addr));
+
+        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME };
+
+        Cursor cursor = ct.getContentResolver().query(myPerson,
+                projection, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            String name=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            Log.e("", "Found contact name");
+            cursor.close();
+            return name;
+        }
+        cursor.close();
+        Log.e("","Not Found contact name");
+        return addr;
     }
 }

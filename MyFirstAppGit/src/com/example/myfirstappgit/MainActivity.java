@@ -281,35 +281,6 @@ public class MainActivity extends Activity
         */
     }
 
-    public String findNameByAddress(Context ct,String addr)
-    {
-        Uri myPerson = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
-                Uri.encode(addr));
-
-        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME };
-
-        Cursor cursor = ct.getContentResolver().query(myPerson,
-                projection, null, null, null);
-
-        if (cursor.moveToFirst()) {
-
-
-
-            String name=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-
-            Log.e("","Found contact name");
-
-            cursor.close();
-
-            return name;
-        }
-
-        cursor.close();
-        Log.e("","Not Found contact name");
-
-        return addr;
-    }
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // This is called when a new Loader needs to be created.  This
@@ -388,6 +359,28 @@ public class MainActivity extends Activity
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
         contactsAdapter.swapCursor(null);
+    }
+
+
+    public String findNameByAddress(Context ct,String addr)
+    {
+        Uri myPerson = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                Uri.encode(addr));
+
+        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME };
+
+        Cursor cursor = ct.getContentResolver().query(myPerson,
+                projection, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            String name=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            Log.e("","Found contact name");
+            cursor.close();
+            return name;
+        }
+        cursor.close();
+        Log.e("","Not Found contact name");
+        return addr;
     }
 
 }

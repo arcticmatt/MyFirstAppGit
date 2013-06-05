@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class MainActivity extends Activity
@@ -68,8 +69,9 @@ public class MainActivity extends Activity
         // Create an empty adapter we will use to display the loaded data.
         contactsAdapter = new SimpleCursorAdapter(this,
                 R.layout.auto_complete, null,
-                new String[]{ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
-                new int[]{R.id.name, R.id.number}, 0);
+                new String[]{ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER,
+                        ContactsContract.CommonDataKinds.Phone._ID},
+                new int[]{R.id.name, R.id.number, R.id.id}, 0);
 
 
         // Prepare the loader.  Either re-connect with an existing one,
@@ -302,13 +304,13 @@ public class MainActivity extends Activity
         // sample only has one Loader, so we don't care about the ID.
         // First, pick the base URI to use depending on whether we are
         // currently filtering.
-        Uri baseUri;
-        if (mCurFilter != null) {
+        Uri baseUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        /*if (mCurFilter != null) {
             baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,
                     Uri.encode(mCurFilter));
         } else {
             baseUri = ContactsContract.Contacts.CONTENT_URI;
-        }
+        }*/
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
@@ -316,8 +318,9 @@ public class MainActivity extends Activity
                 + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + ContactsContract.Contacts.DISPLAY_NAME + " != '' ))";
         return new CursorLoader(this, baseUri,
-                new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID},
-                select, null, ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+                new String[] {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER,
+                        ContactsContract.CommonDataKinds.Phone._ID},
+                        select, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -328,21 +331,43 @@ public class MainActivity extends Activity
         contactsAdapter.setStringConversionColumn(data.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
 
         contactsAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-            @Override
             public Cursor runQuery(CharSequence constraint) {
-                String partialItemName = null;
-                if (constraint != null) {
-                    partialItemName = constraint.toString();
-                }
-                return ;
+                String s = '%' + constraint.toString() + '%';
+                return getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        new String[] {ContactsContract.CommonDataKinds.Phone._ID, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                                ContactsContract.CommonDataKinds.Phone.NUMBER},
+                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE ? OR " +
+                                ContactsContract.CommonDataKinds.Phone.NUMBER + " LIKE ?",
+                        new String[] { s, s },
+                        null);
             }
         });
-
-        CustomAutoComplete textView =
+        final CustomAutoComplete contactsView =
                 (CustomAutoComplete) findViewById(R.id.mmWhoNo);
 
+        contactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        textView.setAdapter(contactsAdapter);
+            @Override
+            public void onItemClick(AdapterView<?> av, View arg1, int index,
+                                    long arg3) {
+                TextView nameView = (TextView) arg1.findViewById(R.id.name);
+                TextView numberView = (TextView) arg1.findViewById(R.id.number);
+
+                CharSequence name = nameView.getText();
+                CharSequence number = numberView.getText();
+
+
+
+                contactsView.setText(""+name+"<"+number+">");
+
+            }
+
+
+
+        });
+
+
+        contactsView.setAdapter(contactsAdapter);
 
     }
 

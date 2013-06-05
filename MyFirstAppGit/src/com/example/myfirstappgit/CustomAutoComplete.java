@@ -8,7 +8,7 @@ import android.widget.AutoCompleteTextView;
 
 public class CustomAutoComplete extends AutoCompleteTextView {
     private String previous = "";
-    private String seperator = ";";
+    private String seperator = ",";
 
     public CustomAutoComplete(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);

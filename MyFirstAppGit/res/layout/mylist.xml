@@ -31,32 +31,33 @@
             android:background="@color/white">
 
         <TextView
-                android:id="@+id/text1"
+                android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/dark_blue"/>
         <TextView
-                android:id="@+id/text2"
+                android:id="@+id/id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textSize="5dp"
+                android:textSize="0dp"
                 />
         <TextView
                 android:id="@+id/text4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textSize="15dp"
+                android:textSize="20dp"
                 />
     </LinearLayout>
 
     <TextView
-            android:id="@+id/text3"
+            android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15dp"
             />
 
 </LinearLayout>

@@ -75,7 +75,7 @@ public class CursorLoaderListFragment extends ListFragment
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.mylist, null,
                 new String[] { "address", "_id", "body" },
-                new int[] { R.id.text1, R.id.text2, R.id.text3 }, 0);
+                new int[] { R.id.address, R.id.id, R.id.body }, 0);
         setListAdapter(mAdapter);
 
         // Start out with a progress indicator.

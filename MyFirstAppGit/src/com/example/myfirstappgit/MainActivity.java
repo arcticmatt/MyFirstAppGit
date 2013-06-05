@@ -40,7 +40,7 @@ public class MainActivity extends Activity
 
     public final static String EXTRA_MESSAGE = "com.example.myfirstappgit.MESSAGE";
     Button btnSendSMS;
-    EditText txtPhoneNo;
+    CustomAutoComplete txtPhoneNo;
     EditText txtMessage;
 
     private TextView textCount;
@@ -61,7 +61,7 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
-        //txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
+        txtPhoneNo = (CustomAutoComplete) findViewById(R.id.mmWhoNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
         textCount = (TextView) findViewById(R.id.charCounter);
 
@@ -120,13 +120,25 @@ public class MainActivity extends Activity
             public void onClick(View v)
             {
                 String message = txtMessage.getText().toString();
+                String phoneNo = txtPhoneNo.getText().toString();
+
+                for (int i = 0; i < phoneNo.length(); i++) {
+                    if (phoneNo.charAt(i) != '+' && phoneNo.charAt(i) != '1' && phoneNo.charAt(i) != '2'
+                            && phoneNo.charAt(i) != '3' && phoneNo.charAt(i) != '4'
+                            && phoneNo.charAt(i) != '5' && phoneNo.charAt(i) != '6'
+                            && phoneNo.charAt(i) != '7' && phoneNo.charAt(i) != '8'
+                            && phoneNo.charAt(i) != '9' && phoneNo.charAt(i) != '0') {
+                        phoneNo = phoneNo.substring(0, i) + phoneNo.substring(i + 1);
+                        i--;
+                    }
+                }
 
 
                 //---ensures that only messages that meet the char limit
                 //---are sent and shown
                 if (message.length() > 0 && message.length() <= 160)
                 {
-                    //sendSMS(phoneNo, message);
+                    sendSMS(phoneNo, message);
                     txtMessage.setText(R.string.blank_string);
 
                 }
@@ -358,7 +370,7 @@ public class MainActivity extends Activity
 
 
 
-                contactsView.setText(""+name+"<"+number+">");
+                contactsView.setText("" + name + "<" + number + ">");
 
             }
 

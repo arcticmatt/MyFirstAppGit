@@ -63,7 +63,9 @@ public class SmsReceiver extends BroadcastReceiver {
             String receivedMessage = convertBundleToString(bundle, context);
             //---display the new SMS message---
             Toast.makeText(context, receivedMessage, Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(context, MainActivity.class);
+
+
+            //Intent i = new Intent(context, MainActivity.class);
             /*
             FLAG_ACTIVITY_SINGLE_TOP - If set, the activity will not be
             launched if it is already running at the top of the history stack.

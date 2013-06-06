@@ -74,9 +74,9 @@ public class SmsReceiver extends BroadcastReceiver {
             then a new activity will not be started; instead, the current task will
              simply be brought to the front of the screen with the state it was last in.
              */
-            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("message", receivedMessage);
-            context.startActivity(i);
+            //i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            //i.putExtra("message", receivedMessage);
+            //context.startActivity(i);
         }
     }
 
